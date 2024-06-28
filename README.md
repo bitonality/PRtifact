@@ -1,4 +1,4 @@
-# Create a GitHub Action Using TypeScript
+# PRtifact
 
 [![GitHub Super-Linter](https://github.com/actions/typescript-action/actions/workflows/linter.yml/badge.svg)](https://github.com/super-linter/super-linter)
 ![CI](https://github.com/actions/typescript-action/actions/workflows/ci.yml/badge.svg)
@@ -6,224 +6,265 @@
 [![CodeQL](https://github.com/actions/typescript-action/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/actions/typescript-action/actions/workflows/codeql-analysis.yml)
 [![Coverage](./badges/coverage.svg)](./badges/coverage.svg)
 
-Use this template to bootstrap the creation of a TypeScript action. :rocket:
+PRtifact is a GitHub Action utility designed for reporting workflow artifacts as
+comments on pull requests.
 
-This template includes compilation support, tests, a validation workflow,
-publishing, and versioning guidance.
+## Description
 
-If you are new, there's also a simpler introduction in the
-[Hello world JavaScript action repository](https://github.com/actions/hello-world-javascript-action).
+PRtifact fetches artifacts generated during workflow runs and posts them as
+comments on the corresponding pull request. This action is highly customizable,
+allowing you to specify the exact format and behavior of the comments. An
+example PR comment is shown below:
 
-## Create Your Own Action
+<!-- markdownlint-capture -->
+<!-- markdownlint-disable -->
+<!-- prettier-ignore -->
+| [![test-artifact_name-1](https://img.shields.io/badge/test--artifact__name--1-472d30?style=for-the-badge&logo=github)](https://github.com/bitonality/PRtifact/actions/runs/9766820165) | [![Download](https://img.shields.io/badge/Download-723d46?style=for-the-badge&logo=%5Bobject+Object%5D)](https://github.com/bitonality/PRtifact/actions/runs/9766820165/artifacts/1661093182) | [![Logs](https://img.shields.io/badge/Logs-723d46?style=for-the-badge&logo=%5Bobject+Object%5D)](https://github.com/bitonality/PRtifact/actions/runs/9766820165) |
+| :---: | :---: | :---: |
 
-To create your own action, you can use this repository as a template! Just
-follow the below instructions:
+<details><summary>Build Details</summary>
 
-1. Click the **Use this template** button at the top of the repository
-1. Select **Create a new repository**
-1. Select an owner and name for your new repository
-1. Click **Create repository**
-1. Clone your new repository
+| Name         | Information                              |
+| ------------ | ---------------------------------------- |
+| PR Commit    | 784eea0db6f6c5ed31e109556ae1b69dd15e7b05 |
+| Merge Commit | 411029d144c4cc3d8f5d4b181d9548accfe1e3ae |
+| Size         | 1 MB                                     |
+| Last Updated | Jul 2, 24, 7:24:40 PM UTC                |
+| Expires At   | Jul 3, 24, 7:24:40 PM UTC                |
 
-> [!IMPORTANT]
->
-> Make sure to remove or update the [`CODEOWNERS`](./CODEOWNERS) file! For
-> details on how to use this file, see
-> [About code owners](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners).
+</details>
 
-## Initial Setup
+---
 
-After you've cloned the repository to your local machine or codespace, you'll
-need to perform some initial setup steps before you can develop your action.
+<!-- prettier-ignore -->
+| [![test-artifact_name-2](https://img.shields.io/badge/test--artifact__name--2-472d30?style=for-the-badge&logo=github)](https://github.com/bitonality/PRtifact/actions/runs/9766820165) | [![Download](https://img.shields.io/badge/Download-723d46?style=for-the-badge&logo=%5Bobject+Object%5D)](https://github.com/bitonality/PRtifact/actions/runs/9766820165/artifacts/1661093259) | [![Logs](https://img.shields.io/badge/Logs-723d46?style=for-the-badge&logo=%5Bobject+Object%5D)](https://github.com/bitonality/PRtifact/actions/runs/9766820165) |
+| :---: | :---: | :---: |
 
-> [!NOTE]
->
-> You'll need to have a reasonably modern version of
-> [Node.js](https://nodejs.org) handy (20.x or later should work!). If you are
-> using a version manager like [`nodenv`](https://github.com/nodenv/nodenv) or
-> [`nvm`](https://github.com/nvm-sh/nvm), this template has a `.node-version`
-> file at the root of the repository that will be used to automatically switch
-> to the correct version when you `cd` into the repository. Additionally, this
-> `.node-version` file is used by GitHub Actions in any `actions/setup-node`
-> actions.
+<details><summary>Build Details</summary>
 
-1. :hammer_and_wrench: Install the dependencies
+| Name         | Information                              |
+| ------------ | ---------------------------------------- |
+| PR Commit    | 784eea0db6f6c5ed31e109556ae1b69dd15e7b05 |
+| Merge Commit | 411029d144c4cc3d8f5d4b181d9548accfe1e3ae |
+| Size         | 256.23 KB                                |
+| Last Updated | Jul 2, 24, 7:24:40 PM UTC                |
+| Expires At   | Jul 3, 24, 7:24:41 PM UTC                |
 
-   ```bash
-   npm install
-   ```
+</details>
 
-1. :building_construction: Package the TypeScript for distribution
+<!-- markdownlint-restore -->
 
-   ```bash
-   npm run bundle
-   ```
+## Inputs
 
-1. :white_check_mark: Run the tests
+### `github-token`
 
-   ```bash
-   $ npm test
+- **Description**: GitHub token.
+- **Default**: `${{ github.token }}`
 
-   PASS  ./index.test.js
-     ✓ throws invalid number (3ms)
-     ✓ wait 500 ms (504ms)
-     ✓ test runs (95ms)
+### `workflow-run-id`
 
-   ...
-   ```
+- **Description**: Workflow run number to get artifacts from. Defaults to the
+  workflow job run that is calling this action.
+- **Default**: `${{ github.run_id }}`
 
-## Update the Action Metadata
+### `issue-id`
 
-The [`action.yml`](action.yml) file defines metadata about your action, such as
-input(s) and output(s). For details about this file, see
-[Metadata syntax for GitHub Actions](https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions).
+- **Description**: Issue ID to upload the artifact report to. Defaults to the
+  event that called the workflow that is calling this action.
+- **Default**: `${{ github.event.number }}`
 
-When you copy this repository, update `action.yml` with the name, description,
-inputs, and outputs for your action.
+### `owner`
 
-## Update the Action Code
+- **Description**: Owner to use for artifact querying and report uploading.
+- **Default**: `${{ github.event.repository.owner.name }}`
 
-The [`src/`](./src/) directory is the heart of your action! This contains the
-source code that will be run when your action is invoked. You can replace the
-contents of this directory with your own code.
+### `repo`
 
-There are a few things to keep in mind when writing your action code:
+- **Description**: Repository to use for artifact querying and report uploading.
+- **Default**: `${{ github.event.repository.name }}`
 
-- Most GitHub Actions toolkit and CI/CD operations are processed asynchronously.
-  In `main.ts`, you will see that the action is run in an `async` function.
+### `comment-mode`
 
-  ```javascript
-  import * as core from '@actions/core'
-  //...
+- **Description**: Comment mode. Must be one of `Create`, `CreateOrAppend`,
+  `CreateOrUpdate`, `Append`, `Update`.
+- **Default**: `Create`
 
-  async function run() {
-    try {
-      //...
-    } catch (error) {
-      core.setFailed(error.message)
-    }
-  }
-  ```
+### `hidden-key`
 
-  For more information about the GitHub Actions toolkit, see the
-  [documentation](https://github.com/actions/toolkit/blob/master/README.md).
+- **Description**: Hidden string within the comment body that is used to find
+  which comment to update. Used by all comment modes except `Create`.
+- **Default**: `<!-- PRtifact -->`
 
-So, what are you waiting for? Go ahead and start customizing your action!
+### `separator`
 
-1. Create a new branch
+- **Description**: Separator to add between reports when using the
+  `CreateOrAppend` or `Append` mode.
+- **Default**: `\n`
 
-   ```bash
-   git checkout -b releases/v1
-   ```
+### `handlebars-template`
 
-1. Replace the contents of `src/` with your action code
-1. Add tests to `__tests__/` for your source code
-1. Format, test, and build the action
-
-   ```bash
-   npm run all
-   ```
-
-   > This step is important! It will run [`ncc`](https://github.com/vercel/ncc)
-   > to build the final JavaScript action code with all dependencies included.
-   > If you do not run this step, your action will not work correctly when it is
-   > used in a workflow. This step also includes the `--license` option for
-   > `ncc`, which will create a license file for all of the production node
-   > modules used in your project.
-
-1. Commit your changes
-
-   ```bash
-   git add .
-   git commit -m "My first action is ready!"
-   ```
-
-1. Push them to your repository
-
-   ```bash
-   git push -u origin releases/v1
-   ```
-
-1. Create a pull request and get feedback on your action
-1. Merge the pull request into the `main` branch
-
-Your action is now published! :rocket:
-
-For information about versioning your action, see
-[Versioning](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
-in the GitHub Actions toolkit.
-
-## Validate the Action
-
-You can now validate the action by referencing it in a workflow file. For
-example, [`ci.yml`](./.github/workflows/ci.yml) demonstrates how to reference an
-action in the same repository.
-
-```yaml
-steps:
-  - name: Checkout
-    id: checkout
-    uses: actions/checkout@v4
-
-  - name: Test Local Action
-    id: test-action
-    uses: ./
-    with:
-      milliseconds: 1000
-
-  - name: Print Output
-    id: output
-    run: echo "${{ steps.test-action.outputs.time }}"
-```
-
-For example workflow runs, check out the
-[Actions tab](https://github.com/actions/typescript-action/actions)! :rocket:
+- **Description**: Custom Handlebars template. Can either be a path to a
+  Handlebars file or a literal string.
+- **Required**: No
 
 ## Usage
 
-After testing, you can create version tag(s) that developers can use to
-reference different stable versions of your action. For more information, see
-[Versioning](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
-in the GitHub Actions toolkit.
-
-To include the action in a workflow in another repository, you can use the
-`uses` syntax with the `@` symbol to reference a specific branch, tag, or commit
-hash.
+To use this action, include it as a step in your workflow file. Below is an
+example:
 
 ```yaml
-steps:
-  - name: Checkout
-    id: checkout
-    uses: actions/checkout@v4
+name: Example Workflow
 
-  - name: Test Local Action
-    id: test-action
-    uses: actions/typescript-action@v1 # Commit with the `v1` tag
-    with:
-      milliseconds: 1000
+on:
+  pull_request:
+    branches: ['main']
 
-  - name: Print Output
-    id: output
-    run: echo "${{ steps.test-action.outputs.time }}"
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run some task that uploads artifacts
+        run: echo "Running some tasks..."
+
+      - name: Use PRtifact to post artifacts as PR comment
+        uses: bitonality/PRtifact
+        with:
+          comment-mode: 'CreateOrUpdate'
 ```
 
-## Publishing a New Release
+## Comment Modes
 
-This project includes a helper script, [`script/release`](./script/release)
-designed to streamline the process of tagging and pushing new releases for
-GitHub Actions.
+- `Create`: Creates a new comment.
+- `CreateOrAppend`: Creates a new comment or appends to an existing comment.
+- `CreateOrUpdate`: Creates a new comment or updates an existing comment.
+- `Append`: Appends to an existing comment. Does not create a comment if an
+  existing comment doesn't exist.
+- `Update`: Updates an existing comment. Does not create a comment if an
+  existing comment doesn't exist.
 
-GitHub Actions allows users to select a specific version of the action to use,
-based on release tags. This script simplifies this process by performing the
-following steps:
+## Custom Template
 
-1. **Retrieving the latest release tag:** The script starts by fetching the most
-   recent release tag by looking at the local data available in your repository.
-1. **Prompting for a new release tag:** The user is then prompted to enter a new
-   release tag. To assist with this, the script displays the latest release tag
-   and provides a regular expression to validate the format of the new tag.
-1. **Tagging the new release:** Once a valid new tag is entered, the script tags
-   the new release.
-1. **Pushing the new tag to the remote:** Finally, the script pushes the new tag
-   to the remote repository. From here, you will need to create a new release in
-   GitHub and users can easily reference the new tag in their workflows.
+You can provide a custom Handlebars template for formatting the report. This can
+either be a file path or a literal string. The default template can be found
+here: [report.hbs](./src/templates/report.hbs)
+
+### Providing your own template
+
+#### Artifact Properties
+
+You can iterate over the list of artifacts using a handlebars each loop
+
+```handlebars
+{{#each artifacts}}
+  <!-- Access properties of artifacts -->
+{{/each}}
+```
+
+Each artifact object includes the following properties:
+
+- `id`: The unique identifier of the artifact.
+- `node_id`: The node ID of the artifact.
+- `name`: The name of the artifact.
+- `size_in_bytes`: The size of the artifact in bytes.
+- `url`: The URL to access the artifact.
+- `archive_download_url`: The URL to download the artifact archive.
+- `expired`: A boolean indicating whether the artifact has expired.
+- `created_at`: The date and time when the artifact was created (nullable).
+- `expires_at`: The date and time when the artifact will expire (nullable).
+- `updated_at`: The date and time when the artifact was last updated (nullable).
+- `workflow_run`: An optional object containing workflow run details:
+  - `id`: The unique identifier of the workflow run (optional).
+  - `repository_id`: The ID of the repository where the workflow run occurred
+    (optional).
+  - `head_repository_id`: The ID of the head repository (optional).
+  - `head_branch`: The name of the branch the workflow run is associated with
+    (optional).
+  - `head_sha`: The SHA of the head commit the workflow run is associated with
+    (optional).
+
+#### Misc. Properties
+
+The `../workflowRunUrl` variable is a pre-constructed URL in the form of
+`../context.serverUrl`/`../context.repo.owner`/`../context.repo.name`/actions/runs/`../context.runId`.
+Example: `https://github.com/bitonality/PRtifact/actions/runs/123`.
+
+#### Context Properties
+
+The `Context` object provides a rich set of information about the workflow run,
+which can be used to dynamically populate a Handlebars template. Below is a
+guide on how to utilize the `Context` properties within your template.
+
+The `../context` object has the following properties:
+
+- `payload`: The webhook payload object that triggered the workflow. You can
+  access properties of the payload like this:
+  `{{../context.payload.pull_request.head.sha}}`.
+- `eventName`: The name of the event that triggered the workflow.
+- `sha`: The commit SHA that triggered the workflow.
+- `ref`: The git reference for the workflow.
+- `workflow`: The name of the workflow.
+- `action`: The name of the action.
+- `actor`: The username of the person or app that triggered the workflow.
+- `job`: The job name.
+- `runNumber`: The number of times this workflow has been run for this event.
+- `runId`: The unique identifier of the workflow run.
+- `apiUrl`: The URL to the GitHub REST API.
+- `serverUrl`: The GitHub server URL.
+- `graphqlUrl`: The GitHub GraphQL API URL.
+- `issue`: An object containing the repository `.owner`, `.name`, and issue
+  `.number`.
+- `repo`: A getter that returns the repository `.owner` and `.name`.
+
+#### Helper Functions
+
+- `pretty-date`: Pretty prints a date in UTC format. Example:
+  `{{pretty-date updated_at}}` outputs "Jul 2, 24, 7:24:40 PM UTC"
+- `pretty-size`: Pretty prints a number in byte size format. Example:
+  `{{pretty-size size_in_bytes}}` outputs "256.23 KB"
+- `badge`: Generates a shields.io badge URL in Markdown format. Example
+  `{{badge "Download" "723d46"}}` outputs
+  [!https://img.shields.io/badge/Download-723d46?style&#x3D;for-the-badge&amp;logo&#x3D;%5Bobject+Object%5D].
+  Arguments are
+  `{{badge <text on badge> <hex or color string> <optional simpleicons.org icon>}}`
+
+## Troubleshooting
+
+### Common Issues
+
+- Ensure that the GitHub token has sufficient permissions. You need
+  `contents: read` to query the artifacts and `pull-requests: write` to write to
+  the PR comments.
+- If you are using a custom `handlebars-template` ensure that the path is
+  correct and accessible.
+- Check the workflow logs for any error messages or stack traces.
+
+### Debugging
+
+To debug issues, you can enable step-by-step logging in your workflow file:
+
+```yaml
+jobs:
+  build:
+    steps:
+      - name: Enable Debug Logging
+        run: echo "::set-env name=ACTIONS_STEP_DEBUG::true"
+```
+
+## Contribution
+
+Contributions are welcome! Please fork the repository and submit a pull request
+with your changes. Ensure that your code adheres to the existing coding
+standards and includes appropriate tests and documentation.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file
+for details.
