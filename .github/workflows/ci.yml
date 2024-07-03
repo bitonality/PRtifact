@@ -10,6 +10,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: write
 
 jobs:
   test-typescript:
@@ -47,18 +48,54 @@ jobs:
   test-action:
     name: GitHub Actions Test
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         id: checkout
         uses: actions/checkout@v4
-
-      - name: Test Local Action
-        id: test-action
+      - name: Generate random file
+        run: |
+          dd bs=1024 count=1024 </dev/urandom > fake-artifact-1.txt
+          dd bs=512 count=512 </dev/urandom > fake-artifact-2.txt
+      - name: Upload test artifact 1
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-artifact_name-1
+          path: fake-artifact-1.txt
+          retention-days: 1
+      - name: Upload test artifact 2
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-artifact_name-2
+          path: fake-artifact-2.txt
+          retention-days: 1
+      - name: Test Local Action Create Mode
+        id: test-action-create
         uses: ./
         with:
-          milliseconds: 2000
-
-      - name: Print Output
-        id: output
-        run: echo "${{ steps.test-action.outputs.time }}"
+          comment-mode: CreateOrUpdate
+          hidden-key: '# PRtifact E2E CreateOrUpdate'
+      - name: Test Local Action Custom Template
+        id: test-action-custom-template
+        uses: ./
+        with:
+          handlebars-template: './.github/test-assets/test-template.hbs'
+          hidden-key: '# PRtifact E2E Custom File Test'
+          comment-mode: CreateOrUpdate
+      - name: Test Local Action Literal Template
+        id: test-action-literal-template
+        uses: ./
+        with:
+          # prettier-ignore
+          handlebars-template: '{{#each artifacts}}{{../context.payload.pull_request.head.sha}} {{/each}}'
+          hidden-key: '# PRtifact E2E Literal Template Test'
+          comment-mode: CreateOrUpdate
+      - name: Test Local Action Literal Multiline Template
+        id: test-action-literal-multiline-template
+        uses: ./
+        with:
+          handlebars-template: |
+            {{#each artifacts}}
+              {{../context.payload.pull_request.head.sha}}
+            {{/each}}
+          hidden-key: '# PRtifact E2E Multiline Template Test'
+          comment-mode: CreateOrUpdate

@@ -1,23 +1,52 @@
-name: 'The name of your action here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'PRtifact'
+description:
+  'Utility for reporting workflow artifacts as pull request comments.'
+author: 'bitonality'
 
-# Add your action's branding here. This will appear on the GitHub Marketplace.
 branding:
-  icon: 'heart'
-  color: 'red'
+  icon: 'file-text'
+  color: 'orange'
 
-# Define your inputs here.
 inputs:
-  milliseconds:
-    description: 'Your input description here'
-    required: true
-    default: '1000'
-
-# Define your outputs here.
-outputs:
-  time:
-    description: 'Your output description here'
+  github-token:
+    description: 'Github token'
+    default: ${{ github.token }}
+  workflow-run-id:
+    description:
+      'Workflow run number to get artifacts from. Defaults to the workflow job
+      run that is calling this action.'
+    default: ${{ github.run_id}}
+  issue-id:
+    description:
+      'Issue id to upload the artifact report to. Defaults to the event that
+      called the workflow that is calling this action.'
+    default: ${{ github.event.number }}
+  owner:
+    description: 'Owner to use for artifact querying and report uploading.'
+    default: ${{ github.event.repository.owner.name }}
+  repo:
+    description: 'Repo to use for artifact querying and report uploading.'
+    default: ${{ github.event.repository.name}}
+  comment-mode:
+    description:
+      'Comment mode. Must be one of Create, CreateOrAppend, CreateOrUpdate,
+      Append, Update'
+    default: 'Create'
+  hidden-key:
+    description:
+      'Hidden string within the comment body that is used to find which comment
+      to update. Used by all comment-mode(s) except Create.'
+    default: '<!-- PRtifact -->'
+  separator:
+    description:
+      'Separator to add between reports when using the CreateOrAppend or Append
+      mode.'
+    default: '\n'
+  handlebars-template:
+    description:
+      'Custom handlebars template. Can either be a path to a handlebars file or
+      a literal string.'
+    required: false
 
 runs:
   using: node20
