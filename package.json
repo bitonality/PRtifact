@@ -40,8 +40,8 @@
     "@actions/core": "^1.10.1",
     "@actions/github": "^6.0.0",
     "@types/eslint": "^8.56.10",
-    "@types/jest": "^29.5.12",
-    "console-table-printer": "^2.12.0",
+    "@types/jest": "^29.5.13",
+    "console-table-printer": "^2.12.1",
     "handlebars": "^4.7.8",
     "ts-jest": "^29.1.5",
     "typescript": "^5.5.2"
